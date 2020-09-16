@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev --no-notify --inspect --transpile-only --ignore-watch node_modules src/index.ts",
     "watch": "tsc -w",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "create:migration": "mikro-orm migration:create"
   },
   "dependencies": {
     "@mikro-orm/cli": "^4.0.2",
