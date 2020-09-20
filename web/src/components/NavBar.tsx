@@ -42,8 +42,8 @@ const NavBar: React.FC = () => {
   }
 
   return (
-    <Flex bg="brown" p={4}>
-      <Box ml={"auto"}>{body}</Box>
+    <Flex bg="purple.500" p={4}>
+      <Box ml={"auto"} color="white">{body}</Box>
     </Flex>
   );
 };
