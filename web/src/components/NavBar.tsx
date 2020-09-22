@@ -12,8 +12,6 @@ const NavBar: React.FC = () => {
 
   let body = null;
 
-  console.log("data", data);
-
   if (fetching) {
   } else if (!data?.me) {
     body = (
@@ -42,8 +40,10 @@ const NavBar: React.FC = () => {
   }
 
   return (
-    <Flex bg="purple.500" p={4}>
-      <Box ml={"auto"} color="white">{body}</Box>
+    <Flex position="sticky" top={0} zIndex={1} bg="purple.500" p={4}>
+      <Box ml={"auto"} color="white">
+        {body}
+      </Box>
     </Flex>
   );
 };
