@@ -7,6 +7,7 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
 import { createConnection } from "typeorm";
+import path from "path";
 
 import { COOKIE_NAME, __prod__ } from "./constants";
 import { HelloResolver } from "./resolvers/hello";
@@ -23,9 +24,11 @@ const main = async () => {
     password: "docker",
     logging: true,
     synchronize: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User],
   });
-  
+  await conn.runMigrations();
+
   const app = express();
 
   const RedisStore = connectRedis(session);

@@ -6,7 +6,7 @@ interface LayoutProps {
   variant?: WrapperVariant;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, variant }) => {
+const Layout: React.FC<LayoutProps> = ({ children, variant = "regular" }) => {
   return (
     <>
       <NavBar />
