@@ -1,3 +1,4 @@
+import { Box, Heading } from "@chakra-ui/core";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
@@ -19,12 +20,21 @@ const Post: React.FC = () => {
       <Layout>
         <div>loading...</div>
       </Layout>
-    )
+    );
+  }
+
+  if (!data?.post) {
+    return (
+      <Layout>
+        <Box>Could not find post</Box>
+      </Layout>
+    );
   }
 
   return (
     <Layout>
-      {data?.post?.text}
+      <Heading>{data.post.title}</Heading>
+      {data.post.text}
     </Layout>
   );
 };
