@@ -25,8 +25,6 @@ const Index = () => {
     );
   }
 
-  console.log(error?.message);
-
   return (
     <Layout>
       {!data && loading ? (
