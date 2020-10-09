@@ -1,27 +1,37 @@
 import { Box, Button } from "@chakra-ui/core";
 import { Form, Formik } from "formik";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
 
 import InputField from "../components/InputField";
 import Wrapper from "../components/Wrapper";
-import { useRegisterMutation } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
+import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
+import { withApollo } from "../utils/withApollo";
 
 interface RegisterProps {}
 
 const Register: React.FC<RegisterProps> = () => {
   const router = useRouter();
-  const [, handleRegister] = useRegisterMutation();
+  const [handleRegister] = useRegisterMutation();
 
   return (
     <Wrapper variant="small">
       <Formik
         initialValues={{ username: "", email: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
-          const response = await handleRegister({ options: values });
+          const response = await handleRegister({
+            variables: { options: values },
+            update: (cache, { data }) => {
+              cache.writeQuery<MeQuery>({
+                query: MeDocument,
+                data: {
+                  __typename: "Query",
+                  me: data?.register.user,
+                },
+              });
+            },
+          });
           if (response.data?.register.errors) {
             setErrors(toErrorMap(response.data.register.errors));
           } else if (response.data?.register.user) {
@@ -36,11 +46,7 @@ const Register: React.FC<RegisterProps> = () => {
               placeholder="Username"
               label="Username"
             />
-            <InputField
-              name="email"
-              placeholder="email"
-              label="Email"
-            />
+            <InputField name="email" placeholder="email" label="Email" />
             <Box mt={4}>
               <InputField
                 name="password"
@@ -64,4 +70,4 @@ const Register: React.FC<RegisterProps> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Register);
+export default withApollo({ ssr: false })(Register);
